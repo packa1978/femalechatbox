@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chatbot Prototype Demo!</title>
+
+    <!-- this is for mobile screens -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="img/favicon.png" />
+
+    <!-- this is for our css files - we have to link our html file to the css files -->
+    <link rel="stylesheet" media="all" href="../component/styles/setup.css" />
+    <link rel="stylesheet" media="all" href="../component/styles/says.css" />
+    <link rel="stylesheet" media="all" href="../component/styles/reply.css" />
+    <link rel="stylesheet" media="all" href="../component/styles/typing.css" />
+    <link rel="stylesheet" media="all" href="../component/styles/input.css" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Work+Sans:400,600,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- css stylesheet for the background of the web page (no need to worry about this) -->
+    <style>
+      body {
+        background: #e6e6e6;
+      }
+      .bubble-container {
+        height: 100vh;
+      }
+      .bubble-container .input-wrap textarea {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- header for the chatbot  -->
+    <div id="chat">
+      <div class="header">
+        <img src="img/image.jpg" width="40px;" />
+        <div>
+          <h1>Feminist Finance Box</h1>
+          <p>Helping you get that money</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- This is to power the chatbot, you do not need to worry about this area -->
+    <script src="../component/js/Bubbles.js"></script>
+    <script>
+      var chatWindow = new Bubbles(
+        document.getElementById("chat"),
+        "chatWindow",
+        {
+          inputCallbackFn: function (o) {
+            // this is for the bot - don't worry
+            var match = function (key) {
+              setTimeout(function () {
+                chatWindow.talk(convo, key); // restart current convo from point found in the answer
+              }, 600);
+            };
+
+            // sanitize text for search function - for the bot
+            var strip = function (text) {
+              return text
+                .toLowerCase()
+                .replace(/[\s.,\/#!$%\^&\*;:{}=\-_'"`~()]/g, "");
+            };
+
+            // search function -  for the bot
+            var found = false;
+            o.convo[o.standingAnswer].reply.forEach(function (e, i) {
+              strip(e.human_response).includes(strip(o.input)) &&
+              o.input.length > 0
+                ? (found = e.bot_answer)
+                : found
+                ? null
+                : (found = false);
+            });
+            found ? match(found) : miss();
+          },
+        }
+      ); // section for setting up bot is finished.
+
+      // This is where your conversation is going to happen! Only focus here!
+      var convo = {
+        // first section
+        intro: {
+          bot_says: [
+            "Hey, FFB here! FFB is here to help you make better decisions about money",
+            "<img src=https://media.giphy.com/media/KMnWtff9VlCeM3XEkT/giphy-downsized-large.gif />",
+          ],
+          human_reply: [
+            {
+              human_response:
+                "Cool, but what has feminism got to do with money?",
+              bot_answer: "sharp",
+            },
+          ],
+        },
+
+        //second section
+
+        sharp: {
+          bot_says: [
+            "Good question, you're sharp! Feminism can be a tool for exploring all kinds of inequalities, including the ways that women or other gender minorities might be finanacially discriminated against.",
+          ],
+          human_reply: [
+            {
+              human_response: "OK, got it",
+              bot_answer: "explore",
+            },
+            {
+              human_response: "Tell me more",
+              bot_answer: "books",
+            },
+          ],
+        },
+          //third section
+
+        explore: {
+          bot_says: [
+            "Great ! What would you like to explore first?",
+          ],
+          human_reply: [
+            {
+              human_response: "How to save",
+              bot_answer: "how-to-save",
+            },
+            {
+              human_response: "Pensions",
+              bot_answer: "pensions",
+            },
+            {
+              human_response: "Spending wisely",
+              bot_answer: "spending-wisely"
+            },
+          ],
+        },
+        //fourth section
+
+        books: {
+          bot_says: [
+            "There are some books on feminism and money - check out 'Women by Capitalism'by Vicky pryce, or 'Who cooked Adam's Dinner: story about women and economics'by Katherine Marcal", " You can also read about feminism and finance of FFB website!", "What would you like to explore next?",
+          ],
+          human_reply: [
+            {
+              human_response: "How to save",
+              bot_answer: "how-to-save",
+            },
+            {
+              human_response: "Pensions",
+              bot_answer: "pensions",
+            },
+            {
+              human_response: "Spending wisely",
+              bot_answer: "spending-wisely",
+            },
+          ],
+        },
+        //fifth section
+
+        "how-to-save": {
+          bot_says: [
+            "<img src=https://media.giphy.com/media/uBnG2W9bvjLTGVhojx/giphy.gif />",
+            "Great ! It's helpful to think about how to save from the first time you earn some income.",
+          ],
+          human_reply: [
+            {
+              human_response: "Why? I never feel like I have engough to save.",
+              bot_answer: "#",
+            },
+            {
+              human_response: "Yeah, that is obvious.",
+              bot_answer: "#",
+            },
+        
+          ],
+        },
+        //sixts section
+
+        "pensions": {
+          bot_says: [
+            "<img src=https://media.giphy.com/media/3oKIPnAjNfPKl8czVC/giphy.gif />",
+            "Great ! It's helpful to think about your pension throughout your career.",
+          ],
+          human_reply: [
+            {
+              human_response: "Why? The future seems so far away.",
+              bot_answer: "#",
+            },
+            {
+              human_response: "Yeah, that is obvious.",
+              bot_answer: "#",
+            },
+        
+          ],
+        },
+        //seventh section
+
+        "spending-wisely": {
+          bot_says: [
+            "<img src=https://media.giphy.com/media/3ohze3cqkv058SUy2s/giphy.gif />",
+            "Great ! It's helpful to think about spending wisely throughout your live.",
+          ],
+          human_reply: [
+            {
+              human_response: "But what is wise? and who gets to decide that anyway?",
+              bot_answer: "#",
+            },
+            {
+              human_response: "Yeah, that is obvious.",
+              bot_answer: "#",
+            },
+        
+          ],
+        },
+
+        //make sure you always keep this as this closes line 76!!!!!!
+      };
+      //make sure you always keep this as this closes line 76!!!!!!
+
+      //Do not worry about this!
+      chatWindow.talk(convo);
+    </script>
+  </body>
+</html>
